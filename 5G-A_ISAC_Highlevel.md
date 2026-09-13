@@ -267,3 +267,6 @@ if __name__ == "__main__":
 5. CT3/CT4 ISAC Sensing Function Services (TS 29.545 - Protocol aspects of the new Sensing Function).
 6. RAN1/RAN3 Study on ISAC for NR (TR 38.765 - Performance metric, Performance evaluation, Measurements, RAN-CN procedures and signalling).
 7. RAN3 Core part: ISAC for NR (New TSs for Ns general aspects and principles, Ns Layer 1, Ns Signalling transport, NG-RAN; Ns Application Protocol) See RP-261566.
+
+### 6G ISAC references
+* https://www.sharetechnote.com/html/6G/6G_Research_ISAC.html
