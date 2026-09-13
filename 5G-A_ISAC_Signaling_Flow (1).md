@@ -92,7 +92,39 @@ TotalActiveSubcarriers = 125      # Spectral footprint allocated per sensing com
 
 ---
 
-## ⚡ 3. Layer 1 (L1) Physical Layer Configuration
+## 3. MAC Layer & Software Scheduler Engineering
+
+The MAC scheduler balances user cellular SLAs against the periodic insertion of deterministic sensing waveforms.
+
+### A. Multiplexing Implementation Architectures
+* **Time-Division Multiplexing (TDM):** Dedicated slots or individual OFDM symbols are locked exclusively for sensing pulses (e.g., PRS bursts). This eliminates self-interference entirely but causes a "throughput cliff" by pausing user traffic.
+* **Frequency-Division Multiplexing (FDM):** Interleaves sensing pilots on specific resource blocks alongside active PDSCH/PUSCH data channels. This allows parallel execution, but requires the software to schedule guard bands to prevent target Doppler shifts from bleeding into user data.
+* **Spatial Multiplexing (SDM):** Utilizes Massive MIMO to calculate isolated precoding vectors ($\mathbf{W}_{	ext{comm}}$ and $\mathbf{W}_{	ext{sense}}$), firing data toward a user while simultaneously sweeping an analytical sensing beam across a target sector.
+
+### B. Comb Pattern Selection Frameworks
+To preserve spectral resources, the scheduler maps sparse pilots instead of full-grid allocations:
+* **Comb-2 Structure:** Maximum energy capture per pulse, extending the **Maximum Detectable Range**. However, it halves the resource grid block availability for standard data pipelines.
+* **Comb-4 / Comb-6 Structure:** Maximizes commercial user capacity but increases **Range Ambiguity** constraints, forcing the software layer to process secondary math equations to filter out "ghost targets."
+
+### C. Dynamic Frame Restructuring & Adaptive Bursts
+The scheduler monitors prediction errors from tracking loops. If an uncooperative target (e.g., a drone) exhibits unpredictable acceleration, the MAC layer overrides standard communication frames to spin up a high-frequency tracking burst:
+
+```
+[ Frame N: Communications Focus Mode ]
+ ┌───────┬───────┬───────┬───────┐
+ │ Slot0 │ Slot1 │ Slot2 │ Slot3 │   -> 95% Communication Data Payload
+ └───────┴───────┴───────┴───────┘   -> 5% Static Reference Pilots
+ 
+[ Frame N+1: High-Priority ISAC Event Triggered ]
+ ┌───────┬───────┬───────┬───────┐
+ │ Slot0 │ Slot1 │ Slot2 │ Slot3 │   -> 40% Frame Capacity Intercepted
+ └───┬───┴───────┴───┬───┴───────┘
+     ▼               ▼
+ [Sensing Beam 1] [Sensing Beam 2]   -> Real-time targeted spatial sweep
+```
+---
+
+## ⚡ 4. Layer 1 (L1) Physical Layer Configuration
 
 The physical layer dictates the exact over-the-air waveform geometry used to maximize target echo extraction.
 
@@ -122,7 +154,7 @@ Once the echo is captured by the antenna arrays, the L1 processing engine parses
 
 ---
 
-## 📊 Protocol Stack & Information Exchange Matrix
+## 📊 5. Protocol Stack & Information Exchange Matrix
 
 | Phase | Layer | Primary Interfaces | Core Parameter Payload Elements |
 | :--- | :--- | :--- | :--- |
@@ -131,7 +163,6 @@ Once the echo is captured by the antenna arrays, the L1 processing engine parses
 | **3. Activation**| L2 DU to RU/UE| MAC-CE, DCI | Immediate slot assignments, Beam Index configurations, Fast activation toggles. |
 | **4. Execution** | L1 Over-the-Air| OFDM Radio Links | Repurposed PRS/SRS/CSI-RS comb configurations, pulse timing bursts, phase echo tracking. |
 | **5. Reporting** | Cross-Layer | L1/L2 Feedbacks ➔ F1AP | Delay-Doppler matrices, extracted AoA profiles, state tracking vectors $[X, Y, Z, \Delta v, \sigma_{\text{RCS}}]$. |
-
 
 
 ```python
