@@ -256,3 +256,14 @@ if __name__ == "__main__":
     process_isac_telemetry(MOCK_ISAC_STREAM)
 
 ```
+
+
+### 5G-A sensing progress in 3GPP WGs (July 2026)
+
+1. SA1 Service requirements for ISAC (TS 22.137 - Use cases & requirements).
+2. SA2 Study on ISAC (TR 23.700-14 - Study for 5G sensing architecture).
+3. SA2 ISAC (TS 23.137 – Specification for 5G sensing architecture).
+4. SA3 Study on Security and Privacy Aspects of ISAC (TR 33.777).
+5. CT3/CT4 ISAC Sensing Function Services (TS 29.545 - Protocol aspects of the new Sensing Function).
+6. RAN1/RAN3 Study on ISAC for NR (TR 38.765 - Performance metric, Performance evaluation, Measurements, RAN-CN procedures and signalling).
+7. RAN3 Core part: ISAC for NR (New TSs for Ns general aspects and principles, Ns Layer 1, Ns Signalling transport, NG-RAN; Ns Application Protocol) See RP-261566.
