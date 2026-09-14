@@ -82,7 +82,7 @@ The gNB-DU is the functional entity responsible for translating high-level sensi
 │                                                                 │
 │  F1AP Interface Handler                                         │
 │  ├─ Parse Sensing Resource Coordination Information IE          │
-│  ├─ Validate QoS constraints & resource pools                  │
+│  ├─ Validate QoS constraints & resource pools                   │
 │  └─ Map to internal DU scheduling policies                      │
 │                                                                 │
 │  MAC Scheduler (Dual-Mode)                                      │
@@ -219,10 +219,10 @@ ELSE:
 ```
 Frequency Domain (Per Slot):
 ┌────────────────────────────────────────────────────────┐
-│ RB0  │ RB1  │ RB2  │ RB3  │ RB4  │ RB5  │ RB6  │ RB7  │
-├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-│ PRS  │ PDSCH│ PDSCH│ PRS  │ PDSCH│ PDSCH│ PRS  │ PDSCH│
-│ (Comb-4 Pattern)  │ (Communication Data Payload)    │
+│ RB0  │ RB1  │ RB2  │ RB3  │ RB4  │ RB5  │ RB6  │ RB7   │
+├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────-┤
+│ PRS  │ PDSCH│ PDSCH│ PRS  │ PDSCH│ PDSCH│ PRS  │ PDSCH │
+│ (Comb-4 Pattern)  │ (Communication Data Payload)       │
 └────────────────────────────────────────────────────────┘
 
 DU Scheduler State Machine:
@@ -316,7 +316,7 @@ DU Feedback Processing Pipeline:
 │  ├─ Buffer 4–8 L1 reports            │
 │  ├─ Temporal averaging (reduce noise)│
 │  ├─ Cross-correlation peak detection │
-│  └─ Track state vector [X,Y,Z,v,RCS]│
+│  └─ Track state vector [X,Y,Z,v,RCS] │
 └──────────────┬───────────────────────┘
                │ (Aggregated every 10–40 ms)
                ▼
