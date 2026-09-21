@@ -6,7 +6,9 @@ This document details the control plane and physical layer signaling architectur
 
 ## 🏗️ Protocol Stack Architecture & Signaling Topology
 
-The 5G-A ISAC framework maps high-level application sensing requests down to sub-millisecond physical layer slots. The pipeline moves from the core network down to the Distributed Unit (DU) and Radio Unit (RU) for integrated execution of communication and sensing operations.
+The 5G-A ISAC framework maps high-level application sensing requests down to sub-millisecond physical layer slots. 
+The pipeline moves from the core network down to the Distributed Unit (DU) and Radio Unit (RU) for integrated execution of 
+communication and sensing operations.
 
 ```
 [ Core Network / Sensing Function (SF) ]
@@ -38,7 +40,8 @@ The 5G-A ISAC framework maps high-level application sensing requests down to sub
 
 ## 📡 1. Layer 3 (L3) Control Plane Signaling
 
-The L3 layer handles session establishment, target geofencing, and multi-node topology assignment. The core network's **Sensing Function (SF)** initiates requests via service APIs over the Service-Based Interface (SBI) following TS 29.545 standardization.
+The L3 layer handles session establishment, target geofencing, and multi-node topology assignment. 
+The core network's **Sensing Function (SF)** initiates requests via service APIs over the Service-Based Interface (SBI) following __TS 29.545__ standardization.
 
 ### TS 29.545 / TS 23.137 Service Exposure Payload (JSON)
 The following parameter block represents the standardized information element sent from the Core Function to the gNB-CU to spin up an ISAC session:
