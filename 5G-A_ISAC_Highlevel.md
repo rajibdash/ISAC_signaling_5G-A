@@ -607,3 +607,5 @@ if __name__ == "__main__":
 
 ### 6G ISAC references
 * https://www.sharetechnote.com/html/6G/6G_Research_ISAC.html
+
+## *Disclaimer*: The above informations needs to be refined with more understanding and knowledge while things will be unfolded by the time. 
