@@ -458,11 +458,11 @@ Once the echo is captured by the antenna arrays, the L1 processing engine parses
 
 | Phase | Layer | Primary Interfaces | Core Parameter Payload Elements | DU Responsibility |
 | :--- | :--- | :--- | :--- | :--- |
-| **1. Request** | L3 Core to CU | HTTP/SBI, NGAP | `SensingSessionID`, `SensingOperationMode`, `TargetType`, `Sensing_QoS_Profile`, Geo-coordinates. | Receive & validate constraints. |
-| **2. Allocation** | L3 CU to DU | F1AP, RRC Reconfig | `Sensing Resource Coordination Information IE`, Resource Pool allocation maps, Reference Signal Type. | Parse F1AP, bind resources, compute beams, initialize SIC. |
-| **3. Activation**| L2 DU to RU/UE| MAC-CE, DCI | Immediate slot assignments, Beam Index configurations, Fast activation toggles. | Schedule MAC-CE, drive RU DSP config. |
-| **4. Execution** | L1 Over-the-Air| OFDM Radio Links | Repurposed PRS/SRS/CSI-RS comb configurations, pulse timing bursts, phase echo tracking. | Generate L1 waveform instructions, sync timing. |
-| **5. Reporting** | Cross-Layer | L1/L2 Feedbacks ➔ F1AP | Delay-Doppler matrices, extracted AoA profiles, state tracking vectors $[X, Y, Z, \Delta v, \sigma_{\text{RCS}}]$. | Aggregate L1 reports, filter noise, encapsulate F1AP, forward to CU. |
+| **1.Request** | L3 Core to CU | HTTP/SBI, NGAP | `SensingSessionID`, `SensingOperationMode`, `TargetType`, `Sensing_QoS_Profile`, Geo-coordinates. | Receive & validate constraints. |
+| **2.Allocation** | L3 CU to DU | F1AP, RRC Reconfig | `Sensing Resource Coordination Information IE`, Resource Pool allocation maps, Reference Signal Type. | Parse F1AP, bind resources, compute beams, initialize SIC. |
+| **3.Activation**| L2 DU to RU/UE| MAC-CE, DCI | Immediate slot assignments, Beam Index configurations, Fast activation toggles. | Schedule MAC-CE, drive RU DSP config. |
+| **4.Execution** | L1 Over-the-Air| OFDM Radio Links | Repurposed PRS/SRS/CSI-RS comb configurations, pulse timing bursts, phase echo tracking. | Generate L1 waveform instructions, sync timing. |
+| **5.Reporting** | Cross-Layer | L1/L2 Feedbacks ➔ F1AP | Delay-Doppler matrices, extracted AoA profiles, state tracking vectors $[X, Y, Z, \Delta v, \sigma_{\text{RCS}}]$. | Aggregate L1 reports, filter noise, encapsulate F1AP, forward to CU. |
 
 ---
 
