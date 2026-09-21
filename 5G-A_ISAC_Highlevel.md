@@ -611,4 +611,6 @@ if __name__ == "__main__":
 ### 6G ISAC references
 * https://www.sharetechnote.com/html/6G/6G_Research_ISAC.html
 
+### Note on 6G Spectrum: To solve the severe propagation gap between FR1 and FR2, 6G introduces FR3 (7.125 GHz to 24.25 GHz) as a "golden mid-band" to bridge the coverage of FR1 with the high bandwidth of FR2.
+
 ## *Disclaimer*: The above informations needs to be refined with more understanding and knowledge while things will be unfolded by the time. 
