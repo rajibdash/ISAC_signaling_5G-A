@@ -175,8 +175,7 @@ To achieve high-throughput, multi-tenant trustworthiness within the 6G-RAN data 
 
 $$M(x) = f(x) + Y$$
 
-Where $Y \sim 	ext{Lap}\left(rac{\Delta f}{\epsilon}
-ight)$, calibrated against the maximum sensitivity ($\Delta f$) of the sensor range to prevent localization fingerprinting of individual user equipment (UE).
+Where $Y \simext{Lap}\left(rac{\Delta f}{\epsilon}ight)$, calibrated against the maximum sensitivity ($\Delta f$) of the sensor range to prevent localization fingerprinting of individual user equipment (UE).
 
 ### 4. Continuous Trustworthiness Attestation
 * **Mechanism:** Every streaming data frame maintains a trust header consisting of a **Cryptographic Verifiable Credential (VC)** signed by the ingestion node's hardware Root of Trust.
