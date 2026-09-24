@@ -12,13 +12,13 @@ The **Data Access and Security Hub (DASH)** is a novel 6G Radio Access Network (
 
 ---
 
-## 2. Cross-Layer Deployment Architectures
+## 2. Cross Layer Deployment Architectures(Draft)
 
 DASH is dynamically deployable across various functional entities in the 6G-RAN, depending on strict latency, throughput, and compute constraints.
 
 ```
 +-------------------------------------------------------------------------------+
-|                        6G-RAN Higher Layers (CU-UP / gNodeB)                 |
+|                        6G-RAN Higher Layers (CU-UP / gNodeB)                  |
 |  +-------------------------------------------------------------------------+  |
 |  | DASH dApp (Instance 3)                                                  |  |
 |  | - Core Services: Global Fusion, Historical Analytics, Compliance Storage|  |
@@ -30,7 +30,7 @@ DASH is dynamically deployable across various functional entities in the 6G-RAN,
 |                        6G-RAN Distributed Unit (DU)                           |
 |  +-------------------------------------------------------------------------+  |
 |  | DASH Process (Instance 2)                                               |  |
-|  | - Core Services: Microsecond Ingestion, Zero-Copy Shared Memory IPC      |  |
+|  | - Core Services: Microsecond Ingestion, Zero-Copy Shared Memory IPC     |  |
 |  +-------------------------------------------------------------------------+  |
 +-------------------------------------------------------------------------------+
                                        |
@@ -39,7 +39,7 @@ DASH is dynamically deployable across various functional entities in the 6G-RAN,
 |                        Baseband Hardware / SoC / FPGA                         |
 |  +-------------------------------------------------------------------------+  |
 |  | DASH Hardware IP Core (Instance 1)                                      |  |
-|  | - Core Services: Line-rate Crypto (AES-GCM), Hardware TEE (Enclaves)     |  |
+|  | - Core Services: Line-rate Crypto (AES-GCM), Hardware TEE (Enclaves)    |  |
 |  +-------------------------------------------------------------------------+  |
 +-------------------------------------------------------------------------------+
 ```
@@ -77,6 +77,7 @@ service SecureExposureService {
   rpc SubscribeSensorData(ExposureSubscriptionRequest) returns (stream ExposedSensorDataPayload);
 }
 
+// Different Sensor Types
 enum SensorType {
   SENSOR_TYPE_UNSPECIFIED = 0;
   SENSOR_TYPE_ISAC_RADAR = 1;
@@ -170,7 +171,8 @@ To achieve high-throughput, multi-tenant trustworthiness within the 6G-RAN data 
 
 $$M(x) = f(x) + Y$$
 
-Where $Y \sim 	ext{Lap}\left(rac{\Delta f}{\epsilon}ight)$, calibrated against the maximum sensitivity ($\Delta f$) of the sensor range to prevent localization fingerprinting of individual user equipment (UE).
+Where $Y \sim 	ext{Lap}\left(rac{\Delta f}{\epsilon}
+ight)$, calibrated against the maximum sensitivity ($\Delta f$) of the sensor range to prevent localization fingerprinting of individual user equipment (UE).
 
 ### 4. Continuous Trustworthiness Attestation
 * **Mechanism:** Every streaming data frame maintains a trust header consisting of a **Cryptographic Verifiable Credential (VC)** signed by the ingestion node's hardware Root of Trust.
