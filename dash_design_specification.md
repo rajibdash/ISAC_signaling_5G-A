@@ -1,20 +1,20 @@
-# Data Access and Security Hub (DASH): Complete Technical Design Specification
+# Data Access and Security Hub (DASH): Technical Design Specification
 
 ## 1. Executive Summary & Core Concepts
 
-The **Data Access and Security Hub (DASH)** is a novel 6G Radio Access Network (RAN) data plane entity. It aggregates multi-sensor data of diverse technologies while providing secure data access, processing, storage, and exposure. DASH ensures multi-tenant data privacy and trustworthiness, and can be fully distributed throughout the data plane wherever needed in the 6G-RAN architecture.
+The **Data Access and Security Hub (DASH)** is a novel 6G Radio Access Network (RAN) data plane entity. It aggregates multi Sensor data of diverse technologies while providing secure data access, processing, storage, and exposure. DASH ensures multi Tenant or multi Vendor data privacy and trustworthiness, and can be fully distributed throughout the data plane wherever needed in the 6G-RAN architecture.
 
 ### Key Capabilities
-* **Multi-Sensor Aggregation:** Ingests data from diverse physical layer technologies, including Integrated Sensing and Communication (ISAC), radar, lidar, camera systems, and RF fingerprinting.
+* **Multi Sensor Aggregation:** Ingests data from diverse physical layer technologies, including Integrated Sensing and Communication (ISAC), radar, lidar, camera systems, and RF fingerprinting.
 * **Zero-Trust Secure Access:** Provides strict identity verification and role-based access control (RBAC) at the data plane layer.
-* **Hardware-Accelerated Privacy & Trust:** Uses Trusted Execution Environments (TEEs) and Homomorphic Encryption (HE) to process sensitive telemetry without leaking information.
+* **Hardware Accelerated Privacy & Trust:** Uses Trusted Execution Environments (TEEs) and Homomorphic Encryption (HE) to process sensitive telemetry data without leaking information.
 * **Ultra-Low Latency Exposure:** Implements Zero-Copy shared memory and line-rate streaming APIs for near-Real-Time RIC elements and distributed applications (dApps).
 
 ---
 
 ## 2. Cross Layer Deployment Architectures(Draft)
 
-DASH is dynamically deployable across various functional entities in the 6G-RAN, depending on strict latency, throughput, and compute constraints.
+DASH is dynamically deployable across various functional entities in the 6G RAN, depending on strict latency, throughput, and compute constraints.
 
 ```
 +-------------------------------------------------------------------------------+
@@ -58,7 +58,7 @@ DASH is dynamically deployable across various functional entities in the 6G-RAN,
 
 ## 3. Protobuf & gRPC API Definitions
 
-DASH uses high-performance, strongly-typed gRPC services over Protocol Buffers (v3) to handle ultra-low latency sensor ingestion and exposure.
+DASH uses high-performance, strongly-typed gRPC services over Protocol Buffers (v3) to handle ultra low latency sensor ingestion and exposure/manifestation.
 
 ```protobuf
 syntax = "proto3";
@@ -77,13 +77,17 @@ service SecureExposureService {
   rpc SubscribeSensorData(ExposureSubscriptionRequest) returns (stream ExposedSensorDataPayload);
 }
 
-// Different Sensor Types
+// Different Sensor Types (TBU)
 enum SensorType {
   SENSOR_TYPE_UNSPECIFIED = 0;
   SENSOR_TYPE_ISAC_RADAR = 1;
   SENSOR_TYPE_LIDAR = 2;
   SENSOR_TYPE_CAMERA_RGB = 3;
   SENSOR_TYPE_RF_FINGERPRINT = 4;
+  SENSOR_TYPE_THERMAL = 5;
+  SENSOR_TYPE_PRESSURE_VALVE = 6;
+  SENSOR_TYPE_SMART_FAN_TACHOMETERS = 7;
+  SENSOR_TYPE_UNIDENTIFIED = -1;
 }
 
 message SensorDataRequest {
