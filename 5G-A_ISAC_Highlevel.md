@@ -16,6 +16,9 @@ What is being designed (6G ISAC): True radio sensing — where the mobile networ
 
 When 6G rolls out, the RAN node will indeed control these sensing workflows, decide if user equipment (UE) should assist, and ingest that reception data, but it remains an experimental and developmental framework as of today. Do not know if sensing would be default enabled with 6G roll out plan. Where the sensing fusion server will sit for multiple sensors information storage.
 
+* Sensing systems depth: object detection, tracking, target measurement (range, Doppler, angle) and sensor fusion.
+* Signal processing for sensing: detection and estimation, clutter and interference handling, and tracking filters.
+
 ---
 
 ## 🏗️ Protocol Stack Architecture & Signaling Topology
