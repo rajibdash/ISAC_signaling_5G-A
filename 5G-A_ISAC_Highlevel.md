@@ -2,6 +2,16 @@
 
 This document details the control plane and physical layer signaling architecture for **5G-Advanced (5G-A) Integrated Sensing and Communication (ISAC)** based on 3GPP Release 19 requirements and Release 20 enhancements.
 
+The Standards Context: 5G-Advanced and 6G
+ISAC isn't just an academic curiosity — it's being actively standardized by every major wireless body:
+
+* 3GPP Release 19 (5G-Advanced): Introduced study items on "Sensing" as a new NR (New Radio) capability. The study item SP-231458 examines sensing use cases, channel models, and requirements. 3GPP TR 22.837 catalogs specific sensing scenarios and service requirements for NR-based sensing.
+* ITU-R IMT-2030 Framework (Recommendation M.2160): The ITU's vision for 6G explicitly identifies "Integrated Sensing and Communication" as one of the six usage scenarios for next-generation wireless. This places ISAC on the same level of strategic importance as enhanced mobile broadband (eMBB) was for 5G.
+* IEEE 802.11bf (Wi-Fi Sensing): The Wi-Fi community is standardizing sensing capabilities within WLAN, enabling your home router to detect presence, gestures, and even vital signs.
+* ETSI ISG on ISAC: The European Telecommunications Standards Institute has established a dedicated Industry Specification Group for ISAC system architecture and requirements.
+
+The message from the industry is unmistakable: every major standards body has recognized ISAC as a foundational pillar of future wireless systems. This is not a niche academic research topic — it is the mainstream strategic direction.
+
 ---
 
 ## 🏗️ Protocol Stack Architecture & Signaling Topology
