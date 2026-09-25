@@ -12,6 +12,10 @@ ISAC isn't just an academic curiosity — it's being actively standardized by ev
 
 The message from the industry is unmistakable: every major standards body has recognized ISAC as a foundational pillar of future wireless systems. This is not a niche academic research topic — it is the mainstream strategic direction.
 
+What is being designed (6G ISAC): True radio sensing — where the mobile network acts like a radar to detect weather, atmospehere, traffic, or physical objects — is a cornerstone of Ericsson's 6G architecture. Ericsson's researchers have noted that while the goal is to reuse existing hardware with minimal tweaks, implementing it requires new __sensing-capable__ base stations, specialized sensing software functions, and updated workflow frameworks that are not yet natively present in commercial 5G deployments.
+
+When 6G rolls out, the RAN node will indeed control these sensing workflows, decide if user equipment (UE) should assist, and ingest that reception data, but it remains an experimental and developmental framework as of today. Do not know if sensing would be default enabled with 6G roll out plan. Where the sensing fusion server will sit for multiple sensors information storage.
+
 ---
 
 ## 🏗️ Protocol Stack Architecture & Signaling Topology
