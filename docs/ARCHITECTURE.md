@@ -2,6 +2,12 @@
 
 This guide gives an end-to-end view of the ISAC architecture and points to the detailed specifications.
 
+The [5G-A ISAC signaling specification](architecture/5G-A_ISAC_Highlevel.md) provides detailed protocol flow and parameter context.
+
+## Concepts and measurements
+
+The [ISAC basics illustration](assets/reference/6G_Research_ISAC_Basics_01.jpeg) introduces the shared communication-and-sensing purpose and processing flow. The [measurement types illustration](assets/reference/6G_Research_ISAC_MeasType_01.jpeg) is a quick reference for metrics used to describe sensing results.
+
 ## 1. System View
 
 ```
@@ -20,6 +26,12 @@ This guide gives an end-to-end view of the ISAC architecture and points to the d
             │  gNB-RU   │  L1: PRS/SRS/CSI-RS based sensing, echo Rx
             └───────────┘
 ```
+
+## Modes and topology
+
+![ISAC system modes and topologies](assets/diagrams/6G_Research_ISAC_ModeAndTopology_01.jpeg)
+
+Use this diagram when reviewing sensing-node arrangements and operating modes alongside the topology and signaling details in the [5G-A ISAC signaling specification](architecture/5G-A_ISAC_Highlevel.md).
 
 ## 2. Layered Responsibilities
 
@@ -45,3 +57,5 @@ This guide gives an end-to-end view of the ISAC architecture and points to the d
 1. [5G-A_ISAC_Highlevel.md](architecture/5G-A_ISAC_Highlevel.md) – signaling flow and parameters
 2. [Design index](design/DESIGN_INDEX.md) – component designs
 3. [Paper index](../research/PAPERS_INDEX.md) – supporting research
+
+For the signal-processing view, see the [design index](design/DESIGN_INDEX.md). The complete visual inventory is in the [assets index](assets/ASSETS_INDEX.md).
