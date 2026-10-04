@@ -411,6 +411,89 @@ DU Adaptive Tracking Loop (Sub-100ms Cycle):
 
 ---
 
+In ISAC, the sensing waveform is usually not a separate radar waveform family invented from scratch. Instead, the network reuses existing NR signal structures and schedules them so the same radio resources can support communication and sensing. The sensing capability comes from how the waveform is selected, transmitted, beamformed, and processed at the receiver.
+
+### What is the sensing waveform in ISAC?
+
+The sensing waveform is a controlled, known transmit pattern that is intentionally generated so that the receiver can measure the reflected response and estimate target parameters such as range, velocity, and angle. In practice, it is commonly built from NR reference signals and/or communication resources.
+
+The main waveform families used in ISAC are:
+
+- **PRS (Positioning Reference Signal):** typically the clearest downlink sensing waveform for range and delay estimation. It is especially useful in monostatic or network-assisted sensing scenarios.
+- **SRS (Sounding Reference Signal):** used for uplink or UE-assisted sensing when the UE participates in the transmission or when the network measures an uplink sounding response.
+- **CSI-RS (Channel State Information Reference Signal):** useful when beam management and channel estimation are already active; it can support angle and beam-dependent sensing.
+- **DMRS / data-bearing OFDM symbols:** may be reused opportunistically for sensing, but they are less clean than dedicated reference signals because they are optimized for communication throughput and reliability rather than radar measurement quality.
+
+### Why these waveforms work for sensing
+
+The receiver knows the transmitted pattern (or can estimate it with high accuracy). When a target reflects the signal, the echo arrives with a propagation delay, Doppler shift, and angular distortion. The receiver estimates these quantities from the received waveform:
+
+- delay → range
+- Doppler shift → radial velocity
+- phase / beam / spatial response → angle of arrival or angle of departure
+- amplitude and power profile → reflectivity / RCS
+
+Thus, the sensing waveform is the deterministic signal pattern used to create a measurable radar-like output.
+
+### Sensing waveform design parameters
+
+The key trade-offs are:
+
+- **Bandwidth**: wider bandwidth improves range resolution.
+- **Pulse / symbol repetition interval**: affects maximum unambiguous range and Doppler resolution.
+- **Comb density / resource allocation**: controls the sensing duty cycle versus communication capacity.
+- **Beamforming / precoding**: increases target detection gain and helps isolate the sensing direction.
+- **Timing and synchronization**: must be accurate for reliable delay and Doppler estimation.
+
+### ISAC waveform multiplexing
+
+The waveform is rarely used in isolation. The scheduler chooses how to mix sensing and communication:
+
+- **TDM (Time Division Multiplexing):** dedicated slots or symbols are reserved for sensing, which gives cleaner echo measurements but reduces communication capacity.
+- **FDM (Frequency Division Multiplexing):** sensing reference signals occupy a selected subset of RBs while communication continues elsewhere; efficient but harder to manage due to interference.
+- **SDM / Spatial Multiplexing:** separate communication and sensing beams are generated in spatial domain using MIMO; useful for simultaneous operation but requires advanced beam management and calibration.
+
+### Monostatic, bistatic, and UE-assisted operation
+
+The same waveform principles apply in all topologies, but the sensing geometry changes:
+
+- **Monostatic:** the same gNB transmits and receives the reflection; the waveform is typically PRS or a dedicated sensing pattern.
+- **Bistatic / distributed:** separate transmitter and receiver nodes measure a reflected or scattered signal; time alignment, synchronization, and coordination become critical.
+- **UE-assisted sensing:** the UE may transmit or receive reference signals, providing additional geometry or measurement diversity; SRS or CSI-RS often plays a central role.
+
+### Practical interpretation
+
+For this repository, the sensing waveform should be defined as:
+
+> a known NR reference or OFDM-based transmission pattern — typically PRS, SRS, or CSI-RS — configured in time, frequency, and spatial domains so that the received echo can be used for range, Doppler, and angle estimation.
+
+### Handling unidentified objects in sensing analysis
+
+A critical ISAC problem is that not every detected return maps cleanly to a known object class. In practice, many reports are ambiguous, low-confidence, or simply “unknown.” The analysis pipeline should therefore treat unknown targets as first-class outputs instead of forcing premature classification.
+
+Recommended handling:
+
+- **Uncertainty-aware labeling:** every object report should include confidence, SNR, clutter score, and measurement quality. If the score is poor, mark the object as “unknown / low confidence” instead of assigning a class.
+- **Anomaly scoring:** compute how far the observed signature is from the known class distributions. Large deviations can indicate novel objects, clutter, or mis-association.
+- **Fallback classification:** if a target cannot be confidently tied to a known class, assign a generic label such as “unidentified moving object,” “unknown reflector,” or “likely clutter,” while retaining the raw measurement.
+- **Track continuity checks:** an object may be unknown for a few sensing frames but still correspond to a real track. Use motion continuity, Doppler consistency, and persistence over time before labeling it as a false alarm.
+- **Cross-sensor corroboration:** if radar, camera, lidar, or communication-side measurements disagree, use sensor fusion to decide whether the object is genuinely unknown, clutter, or a known target with poor signal quality.
+- **Clutter and false alarm filtering:** unknown objects should be separated from expected environmental clutter, especially near vegetation, buildings, or atmospheric artifacts.
+- **No overconfident labeling:** if the object signature is too noisy, sparse, or novel, avoid “drone,” “vehicle,” or “bird” labels unless there is enough evidence. The safer default is “unidentified object with low confidence.”
+- **Confidence-driven reporting:** when the system reports “unknown,” it should still retain the target state vector, confidence level, and reason for ambiguity so downstream apps can decide whether to escalate, inspect, or ignore it.
+
+A simple logic pattern is:
+
+```text
+if confidence < threshold
+    => label as UNKNOWN / LOW CONFIDENCE
+elif signature matches known class with enough evidence
+    => assign class
+else
+    => keep as UNKNOWN and continue track association
+
+```
+
 ## 3. MAC Layer & Software Scheduler Engineering
 
 The MAC scheduler balances user cellular SLAs against the periodic insertion of deterministic sensing waveforms. Advanced algorithms coordinate resource allocation and adapt multiplexing strategies dynamically.
