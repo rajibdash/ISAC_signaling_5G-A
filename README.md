@@ -9,6 +9,8 @@ Architecture and design research for **Integrated Sensing and Communication (ISA
 - **Signaling stack** – L3 sensing session control (CU/SF), L2 MAC scheduling and MAC-CE activation (DU), L1 reference waveforms (PRS/SRS/CSI-RS) at the RU.
 - **Sensing data plane** – DASH aggregates, secures and exposes multi-sensor data (ISAC, radar, lidar, camera) to near-RT RIC and dApps.
 - **Sensor fusion** – combining cellular ISAC with passive RF and other sensors.
+- **Sensing waveforms** – NR reference signals such as PRS, SRS, and CSI-RS are reused as controlled sensing signals, with waveform choice balanced against communication capacity and target-estimation fidelity.
+- **Unknown target handling** – low-confidence, ambiguous, or novel returns should be reported as unknown until evidence supports a class assignment.
 
 ## Repository Layout
 
@@ -40,6 +42,7 @@ Architecture and design research for **Integrated Sensing and Communication (ISA
 | Study the sensing data plane / security | [DASH specification](docs/design/components/dash_design_specification.md) |
 | Study scheduler integration | [MAC scheduler design](docs/design/components/isac_mac_scheduler_design.md) |
 | Find the supporting literature | [research/PAPERS_INDEX.md](research/PAPERS_INDEX.md) |
+| Review sensing waveform design and unknown-target analysis | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
 
 ## Status
 
