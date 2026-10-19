@@ -1,6 +1,6 @@
 # ISAC Signaling for 5G-Advanced / 6G
 
-Architecture and design research for **Integrated Sensing and Communication (ISAC)** in 5G-Advanced (3GPP Rel-19/20) and 6G networks. The project captures how sensing topologies, transmitters/receivers and signaling fit together across the RAN protocol stack, plus component-level designs and the reference literature behind them.
+Architecture and design research for **Integrated Sensing and Communication (ISAC)** in 5G-Advanced (3GPP Rel-19/20) and 6G networks. The project captures how sensing topologies, transmitters/receivers, and cross-layer signaling can be organized into deployable system designs.
 
 ## Key Concepts
 
@@ -16,12 +16,14 @@ Architecture and design research for **Integrated Sensing and Communication (ISA
 
 ```
 .
-├── README.md
+├── .gitignore
 ├── LICENSE
+├── README.md
 ├── docs/
 │   ├── ARCHITECTURE.md                      # Architecture overview & reading guide
 │   ├── architecture/
 │   │   └── 5G-A_ISAC_Highlevel.md           # ISAC signaling flow & parameter specification
+│   ├── assets/                              # Diagrams and media assets
 │   └── design/
 │       ├── DESIGN_INDEX.md                  # Component design index
 │       └── components/
@@ -29,7 +31,7 @@ Architecture and design research for **Integrated Sensing and Communication (ISA
 │           └── isac_mac_scheduler_design.md # ISAC-aware gNB MAC scheduler
 └── research/
     ├── PAPERS_INDEX.md                      # Reference papers by topic
-    └── papers/                              # PDFs
+    └── papers/                              # Research PDFs
 ```
 
 ## Navigation Guide
