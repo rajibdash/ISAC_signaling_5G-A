@@ -1,64 +1,116 @@
 # Data Access and Security Hub (DASH): Technical Design Specification
 
-## 1. Executive Summary & Core Concepts
+## 1. Executive Summary
 
-The **Data Access and Security Hub (DASH)** is a novel 6G Radio Access Network (RAN) data plane entity. It aggregates multi Sensor data of diverse technologies while providing secure data access, processing, storage, and exposure. DASH ensures multi Tenant or multi Vendor data privacy and trustworthiness, and can be fully distributed throughout the data plane wherever needed in the 6G-RAN architecture.
+The **Data Access and Security Hub (DASH)** is a proposed 6G RAN data-plane capability that provides:
 
-### Key Capabilities
-* **Multi Sensor Aggregation:** Ingests data from diverse physical layer technologies, including Integrated Sensing and Communication (ISAC), radar, lidar, camera systems, and RF fingerprinting.
-* **Zero-Trust Secure Access:** Provides strict identity verification and role-based access control (RBAC) at the data plane layer.
-* **Hardware Accelerated Privacy & Trust:** Uses Trusted Execution Environments (TEEs) and Homomorphic Encryption (HE) to process sensitive telemetry data without leaking information.
-* **Ultra-Low Latency Exposure:** Implements Zero-Copy shared memory and line-rate streaming APIs for near-Real-Time RIC elements and distributed applications (dApps).
+- **Multi-sensor data aggregation** (ISAC, radar, lidar, camera, RF fingerprinting, and other telemetry)
+- **Policy-driven secure data access** for authorized xApps/rApps/dApps
+- **Privacy-preserving processing** using TEEs and selective homomorphic techniques
+- **Ultra-low-latency exposure paths** for near-real-time RAN intelligence loops
 
----
-
-## 2. Cross Layer Deployment Architectures(Draft)
-
-DASH is dynamically deployable across various functional entities in the 6G RAN, depending on strict latency, throughput, and compute constraints.
-
-```
-+-------------------------------------------------------------------------------+
-|                        6G-RAN Higher Layers (CU-UP / gNodeB)                  |
-|  +-------------------------------------------------------------------------+  |
-|  | DASH dApp (Instance 3)                                                  |  |
-|  | - Core Services: Global Fusion, Historical Analytics, Compliance Storage|  |
-|  +-------------------------------------------------------------------------+  |
-+-------------------------------------------------------------------------------+
-                                       |
-                                       v (E2-like / Service Ingestion Interfaces)
-+-------------------------------------------------------------------------------+
-|                        6G-RAN Distributed Unit (DU)                           |
-|  +-------------------------------------------------------------------------+  |
-|  | DASH Process (Instance 2)                                               |  |
-|  | - Core Services: Microsecond Ingestion, Zero-Copy Shared Memory IPC     |  |
-|  +-------------------------------------------------------------------------+  |
-+-------------------------------------------------------------------------------+
-                                       |
-                                       v (PCIe / Internal Bus / Inter-Core IPC)
-+-------------------------------------------------------------------------------+
-|                        Baseband Hardware / SoC / FPGA                         |
-|  +-------------------------------------------------------------------------+  |
-|  | DASH Hardware IP Core (Instance 1)                                      |  |
-|  | - Core Services: Line-rate Crypto (AES-GCM), Hardware TEE (Enclaves)    |  |
-|  +-------------------------------------------------------------------------+  |
-+-------------------------------------------------------------------------------+
-```
-
-### Architectural Deployment Matrix
-
-| Trade-off Dimension | 1. Distributed Unit (DU) Deployment | 2. Baseband Hardware / SoC / FPGA | 3. Higher Layers (CU-UP / dApp) |
-| :--- | :--- | :--- | :--- |
-| **Latency Target** | Sub-millisecond (100 µs – 1 ms) | Microsecond (< 10 µs) | Millisecond (> 5 ms) |
-| **Compute Profile** | High (x86 / ARM Server Cores) | Low-Medium (Hardened IP, DSP, ASIC) | Elastic (Cloud-native Kubernetes) |
-| **Storage Capacity** | Medium (Ephemeral NVMe Cache) | Minimal (SRAM, Registers, Scratchpad) | High (Persistent Object Storage) |
-| **Primary Use-Case** | Real-time object tracking, local beamforming optimization. | Line-rate encryption, raw waveform IQ sensing matrix parsing. | Macro-mobility optimization, environmental mapping, digital twin. |
-| **Security Perimeter** | OS-level virtualization, DPDK sandboxing. | Silicon-level Hardware Root of Trust (RoT), TEE Enclaves. | Zero-Trust Network Architecture (ZTNA), mTLS micro-segments. |
+DASH is designed to support **cross-domain innovation goals** aligned with broader 6G initiatives such as multi-technology experimentation, AI-native automation, and trustworthy data sharing across heterogeneous infrastructures.
 
 ---
 
-## 3. Protobuf & gRPC API Definitions
+## 2. Design Goals and Non-Goals
 
-DASH uses high-performance, strongly-typed gRPC services over Protocol Buffers (v3) to handle ultra low latency sensor ingestion and exposure/manifestation.
+### 2.1 Goals
+
+1. **Deterministic, low-latency ingestion and exposure** for time-sensitive RAN sensing/control loops.
+2. **Zero-trust security posture** at the data plane boundary.
+3. **Deployment flexibility** across hardware, DU edge, and cloud/higher layers.
+4. **Interoperable interfaces** via gRPC/Protobuf and policy-based service contracts.
+5. **Auditable trust signals** (attestation, lineage, confidence/trust metrics).
+
+### 2.2 Non-Goals
+
+- DASH is **not** a replacement for full OAM/OSS data lakes.
+- DASH is **not** a generic long-term archival platform.
+- DASH does **not** expose raw sensitive payloads by default; exposure is policy-gated.
+
+---
+
+## 3. System Context and Placement in 6G Architecture
+
+DASH can be instantiated at multiple tiers depending on latency budget, compute capacity, and security/performance requirements.
+
+### 3.1 Corrected Cross-Layer Deployment Diagram (Mermaid)
+
+```mermaid
+flowchart TD
+  S[Sensor Sources\nISAC / Radar / Lidar / Camera / RF] --> I1
+
+  subgraph H1[Baseband Hardware / SoC / FPGA]
+    I1[DASH Instance 1\nLine-rate parsing, crypto offload, enclave hooks]
+  end
+
+  I1 --> I2
+
+  subgraph H2[Distributed Unit DU Edge]
+    I2[DASH Instance 2\nMicrosecond ingestion, zero-copy IPC, local policy enforcement]
+  end
+
+  I2 --> I3
+
+  subgraph H3[Higher Layers CU-UP / Edge Cloud]
+    I3[DASH Instance 3\nGlobal fusion, analytics, compliance-aware exposure]
+  end
+
+  I3 --> C[Authorized Consumers\nnear-RT RIC xApps/rApps, analytics dApps]
+
+  KMS[KMS / PKI / Attestation Service] -. trust & key lifecycle .-> I1
+  KMS -. trust & key lifecycle .-> I2
+  KMS -. trust & key lifecycle .-> I3
+```
+
+### 3.2 Deployment Trade-Off Matrix
+
+| Dimension | DU Deployment | Baseband HW / SoC / FPGA | Higher Layers (CU-UP / Edge Cloud) |
+|---|---|---|---|
+| **Latency target** | 100 µs – 1 ms | < 10 µs (path-dependent) | > 5 ms |
+| **Compute profile** | High (x86/ARM) | Constrained but deterministic (ASIC/FPGA/DSP) | Elastic cloud-native |
+| **Storage profile** | Ephemeral edge cache | Minimal local buffers | Persistent/object-backed |
+| **Best suited for** | Real-time local optimization | Wire-speed preprocessing + crypto primitives | Cross-cell/global analytics |
+| **Security anchor** | Host hardening + sandboxing | Hardware root of trust + isolated execution | Zero-trust network segmentation + mTLS |
+
+---
+
+## 4. Functional Architecture
+
+### 4.1 Core Functional Blocks
+
+1. **Sensor Registration & Identity**
+   - Device onboarding with cryptographic identity
+   - Signature verification and provenance checks
+
+2. **Ingestion & Normalization Pipeline**
+   - High-rate stream intake
+   - Metadata harmonization across heterogeneous sensors
+
+3. **Policy Decision & Enforcement**
+   - Attribute/role-based authorization (RBAC + ABAC-ready)
+   - Context-aware release policies per tenant/app
+
+4. **Privacy & Confidential Compute Layer**
+   - TEE-backed protected processing domains
+   - Selective encrypted-domain operations for allowed analytics
+
+5. **Exposure & Subscription Services**
+   - Streaming APIs for approved consumers
+   - Trust/confidence metadata in every exposed frame
+
+6. **Telemetry, Audit, and Compliance**
+   - Immutable event trails for access and policy outcomes
+   - Continuous attestation status monitoring
+
+---
+
+## 5. API Contract (gRPC/Protobuf)
+
+> Notes:
+> - In Protobuf v3, enum values are typically non-negative; use `UNSPECIFIED`/`UNKNOWN` as `0`.
+> - Trust/confidence values should be numeric for downstream analytics.
 
 ```protobuf
 syntax = "proto3";
@@ -67,17 +119,14 @@ package r6g.dash.v1;
 
 import "google/protobuf/timestamp.proto";
 
-// Service handles multi-sensor ingestion into the DASH data plane.
 service SensorIngestionService {
   rpc StreamSensorData(stream SensorDataRequest) returns (SensorDataResponse);
 }
 
-// Service handles secure data exposure to authorized 6G applications (dApps/rApps).
 service SecureExposureService {
   rpc SubscribeSensorData(ExposureSubscriptionRequest) returns (stream ExposedSensorDataPayload);
 }
 
-// Different Sensor Types (TBU)
 enum SensorType {
   SENSOR_TYPE_UNSPECIFIED = 0;
   SENSOR_TYPE_ISAC_RADAR = 1;
@@ -86,16 +135,16 @@ enum SensorType {
   SENSOR_TYPE_RF_FINGERPRINT = 4;
   SENSOR_TYPE_THERMAL = 5;
   SENSOR_TYPE_PRESSURE_VALVE = 6;
-  SENSOR_TYPE_SMART_FAN_TACHOMETERS = 7;
-  SENSOR_TYPE_UNIDENTIFIED = -1;
+  SENSOR_TYPE_SMART_FAN_TACHOMETER = 7;
+  SENSOR_TYPE_UNKNOWN = 8;
 }
 
 message SensorDataRequest {
   string sensor_id = 1;
   SensorType type = 2;
   google.protobuf.Timestamp timestamp = 3;
-  bytes raw_payload = 4;           // Encrypted payload from the sensor unit
-  bytes cryptographic_signature = 5; // To verify sensor authenticity
+  bytes raw_payload = 4;
+  bytes cryptographic_signature = 5;
 }
 
 message SensorDataResponse {
@@ -107,76 +156,128 @@ message SensorDataResponse {
 message ExposureSubscriptionRequest {
   string client_id = 1;
   repeated SensorType requested_types = 2;
-  string authentication_token = 3; // JWT or Zero-Trust Identity Claim
-  bool request_homomorphic_encryption = 4; // True if client cannot view raw data
+  string authentication_token = 3;
+  bool request_homomorphic_encryption = 4;
 }
 
 message ExposedSensorDataPayload {
   string event_id = 1;
   SensorType type = 2;
   google.protobuf.Timestamp processed_timestamp = 3;
-  bytes encrypted_data_block = 4; // Data block encrypted according to target policy
-  string confidence_score = 5;     // Mathematical trustworthiness index [0.0 - 1.0]
+  bytes encrypted_data_block = 4;
+  double confidence_score = 5;
+  string trust_level = 6;
 }
 ```
 
 ---
 
-## 4. End-to-End Data Flow Sequence Diagram
+## 6. End-to-End Runtime Sequence
 
-The following sequence illustrates real-time data ingestion from an ISAC sub-array sensor through DASH executing in a hardware-isolated environment, exposing trust-verified data to a 6G near-RT RIC dApp.
+```mermaid
+sequenceDiagram
+  participant S as ISAC Sensor
+  participant D as DASH Core
+  participant K as KMS/Attestation
+  participant A as Authorized 6G App
 
-```
-+-------------+              +-------------+             +-------------+             +-------------+
-| ISAC Sensor |              |  DASH Core  |             | Security /  |             |  6G dApp    |
-|  Sub-Array  |              | (DU/Hardware|             | KMS Module  |             | (Near-RT)   |
-+-------------+              +-------------+             +-------------+             +-------------+
-       |                            |                           |                           |
-       | 1. Register Sensor (Sign)  |                           |                           |
-       |--------------------------->|                           |                           |
-       |                            | 2. Verify Lineage & Keys  |                           |
-       |                            |-------------------------->|                           |
-       |                            |<--------------------------|                           |
-       |                            | 3. Auth Confirmed         |                           |
-       |                            |                           | 4. Subscribe (JWT)        |
-       |                            |<------------------------------------------------------|
-       |                            | 5. Validate Policy & Token                            |
-       |                            |------------------------------------------------------>|
-       |                            |    Subscription Approved                              |
-       |                            |                           |                           |
-       | 6. Stream Raw Waveform IQ  |                           |                           |
-       |--------------------------->|                           |                           |
-       |    Sensing Matrix          | 7. Ingest into TEE Enclave|                           |
-       |                            |    [HW Accelerated Process|                           |
-       |                            |     & Privacy Anonymize]  |                           |
-       |                            |                           |                           |
-       |                            | 8. Zero-Copy Shared Memory Stream (ExposedSensorData) |
-       |                            |------------------------------------------------------>|
-       |                            |                           |                           |
+  S->>D: 1) Register sensor + signed identity proof
+  D->>K: 2) Verify keys, certificate chain, attestation claims
+  K-->>D: 3) Verification result
+
+  A->>D: 4) Subscribe with token and requested sensor types
+  D->>D: 5) Evaluate policy (tenant, role, purpose, sensitivity)
+  D-->>A: 6) Subscription accepted/rejected
+
+  S->>D: 7) Stream sensor payload + metadata
+  D->>D: 8) Protected processing (TEE) + policy transforms
+  D-->>A: 9) Expose encrypted/filtered stream + confidence/trust fields
 ```
 
 ---
 
-## 5. Cryptographic Framework & Privacy Preservation
+## 7. Security, Privacy, and Trust Model
 
-To achieve high-throughput, multi-tenant trustworthiness within the 6G-RAN data plane without introducing performance bottlenecks, DASH applies a multi-layered cryptographic approach.
+### 7.1 Zero-Trust Data Plane Controls
 
-### 1. Trusted Execution Environments (TEEs)
-* **Mechanism:** DASH separates memory regions using hardware isolation technologies such as **AMD SEV-SNP**, **Intel SGX/TDX**, or **ARM TrustZone** depending on the specific RAN deployment tier.
-* **Application:** Raw sensor payloads (e.g., camera feeds or high-fidelity lidar point clouds) are decrypted *only* inside hardware-protected enclaves. The host operating system or hypervisor cannot view or modify the internal state.
+- Mutual authentication for every producer/consumer path
+- Short-lived credentials and continuous re-validation
+- Default-deny policy with explicit least-privilege grants
 
-### 2. Stream-Lined Functional & Homomorphic Encryption (HE)
-* **Mechanism:** For use cases where third-party analytics dApps must process network trends without accessing raw coordinates or user identifiers, DASH implements **Cheon-Kim-Kim-Song (CKKS)** or **Brakerski-Fan-Vercauteren (BFV)** homomorphic schemes.
-* **Optimized Application:** Because full HE is computationally intensive, DASH applies partial homomorphic encryption explicitly to metadata headers and specific numeric dimensions (e.g., velocity indices or signal strength vectors), allowing structural transformations while preserving linear algebraic properties.
+### 7.2 Confidential Compute
 
-### 3. Differential Privacy (DP) Noise Injection
-* **Mechanism:** A localized differential privacy ($\epsilon, \delta$)-DP mechanism is applied directly inside the processing pipeline before exposing statistical datasets to higher-layer cross-domain orchestrators.
-* **Mathematical Application:** Noise drawn from a Laplacian or Gaussian distribution is added to raw coordinate counters:
+- TEE-backed processing isolates sensitive operations
+- Host OS/hypervisor visibility into plaintext is minimized by design
+- Attestation status can gate exposure eligibility
 
-$$M(x) = f(x) + Y$$
+### 7.3 Cryptography Strategy
 
-Where $Y \simext{Lap}\left(rac{\Delta f}{\epsilon}ight)$, calibrated against the maximum sensitivity ($\Delta f$) of the sensor range to prevent localization fingerprinting of individual user equipment (UE).
+- In transit: mTLS for control/data channels
+- At rest: policy-bound encryption keys managed by KMS/HSM
+- In use: selective encrypted-domain operations where feasible
 
-### 4. Continuous Trustworthiness Attestation
-* **Mechanism:** Every streaming data frame maintains a trust header consisting of a **Cryptographic Verifiable Credential (VC)** signed by the ingestion node's hardware Root of Trust.
-* **Trust Scoring:** The data features an adaptive **Trustworthiness Index ($T_i$)** computed based on the sensor health metrics, history of signature validity, and real-time anomaly detection scores generated via low-overhead physical layer fingerprinting.
+### 7.4 Differential Privacy for Aggregate Exposure
+
+For aggregate/statistical outputs, calibrated noise can be applied:
+
+\[
+M(x) = f(x) + Y
+\]
+
+where \(Y\) follows a Laplace or Gaussian mechanism calibrated by sensitivity and privacy budget \((\epsilon, \delta)\).
+
+### 7.5 Trustworthiness Index (Illustrative)
+
+A normalized trust score can be produced per exposure event:
+
+\[
+T_i = w_1 S_i + w_2 A_i + w_3 H_i - w_4 R_i
+\]
+
+Where:
+- \(S_i\): signature validity signal
+- \(A_i\): attestation confidence
+- \(H_i\): sensor health quality metrics
+- \(R_i\): anomaly/risk score
+- \(\sum w_k = 1\), \(w_k \ge 0\)
+
+---
+
+## 8. Alignment with 6G Multi-Domain Program Themes
+
+To remain consistent with modern 6G collaborative initiatives (including multi-domain experimentation ecosystems), DASH is designed to support:
+
+1. **Cross-domain interoperability** (RAN + edge/cloud + vertical application layers)
+2. **AI-ready data products** with explicit policy and trust metadata
+3. **Secure-by-design exposure** for third-party innovation without raw data overexposure
+4. **Composable deployment** across heterogeneous compute environments
+5. **Experimentation-friendly interfaces** suitable for iterative validation in advanced testbeds
+
+---
+
+## 9. Performance and Reliability Targets (Draft)
+
+- **Ingestion latency (edge path):** p99 < 1 ms (DU deployment profile)
+- **Exposure setup latency:** p99 < 50 ms for authenticated subscription
+- **Availability objective:** 99.99% for exposure control plane components
+- **Backpressure behavior:** bounded queues + deterministic drop policy by priority class
+- **Observability:** end-to-end trace IDs for ingestion-to-exposure lineage
+
+---
+
+## 10. Open Items / To-Be-Validated
+
+1. Final sensor taxonomy and extensibility mechanism.
+2. Formal policy schema for fine-grained data release conditions.
+3. Benchmarked HE scope (exact operations feasible in latency envelope).
+4. Hardware profile baselines across FPGA/ASIC/CPU variants.
+5. RIC integration profile (E2-compatible exposure adapters).
+
+---
+
+## 11. Revision Notes
+
+- Reorganized the specification into implementation-oriented sections.
+- Corrected protocol and mathematical notation issues.
+- Replaced ambiguous architecture depiction with coherent deployment/flow diagrams.
+- Expanded 6G program alignment content to strengthen external relevance and positioning.
