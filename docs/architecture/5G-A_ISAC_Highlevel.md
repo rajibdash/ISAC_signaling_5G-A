@@ -1,5 +1,7 @@
 # 5G-Advanced ISAC Signaling Flow & Parameter Specification
 
+> **Implementation scope:** Treat the sensing-specific messages, JSON fields, F1/Xn information elements, MAC-CE/DCI behavior, and timing values below as illustrative proposals requiring standards and platform verification, not interoperable wire contracts. References to a TS/TR do not establish that the illustrated extension is defined there. For shared-spectrum optimization and the proposed software contract, see [Joint Communication and Sensing on Shared Spectrum](../../README.md#joint-communication-and-sensing-on-shared-spectrum); use its capability checks and measured timing budgets rather than assuming these example values apply.
+
 This document details the control plane and physical layer signaling architecture for **5G-Advanced (5G-A) Integrated Sensing and Communication (ISAC)** based on 3GPP Release 19 requirements and Release 20 enhancements.
 
 The Standards Context: 5G-Advanced and 6G
@@ -61,7 +63,7 @@ The L3 layer handles session establishment, target geofencing, and multi-node to
 The core network's **Sensing Function (SF)** initiates requests via service APIs over the Service-Based Interface (SBI) following __TS 29.545__ standardization.
 
 ### TS 29.545 / TS 23.137 Service Exposure Payload (JSON)
-The following parameter block represents the standardized information element sent from the Core Function to the gNB-CU to spin up an ISAC session:
+The following parameter block illustrates a proposed logical session payload; it is not a standardized wire information element:
 
 ```json
 {
