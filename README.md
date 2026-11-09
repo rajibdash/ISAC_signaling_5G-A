@@ -4,13 +4,13 @@ Architecture and design research for **Integrated Sensing and Communication (ISA
 
 ## Key Concepts
 
-- **ISAC** – communication waveforms and radio resources are reused for object detection, tracking, and target measurement (range, Doppler, angle).
-- **Sensing topologies** – monostatic (same node transmits and receives), bistatic/distributed (different coordinated nodes), and UE-assisted sensing.
-- **Signaling stack** – sensing-session and topology control at L3, resource arbitration at the gNB-DU MAC, and reference-waveform configuration and echo reception at the radio unit (RU).
-- **Sensor fusion server** – ingests ISAC and non-cellular sensor observations, aligns them in time and space, correlates detections into tracks, retains uncertainty, and exposes policy-approved results.
-- **DASH** – the proposed Data Access and Security Hub data plane for multi-sensor ingestion, protected processing, and controlled exposure to RIC applications and other authorized consumers.
+- **ISAC** – Communication waveforms and radio resources are reused for object detection, tracking, and target measurement (range, Doppler, angle).
+- **Sensing topologies** – Monostatic (same node transmits and receives), bistatic/distributed (different coordinated nodes), and UE-assisted sensing.
+- **Signaling stack** – Sensing-session and topology control at L3, resource arbitration at the gNB-DU MAC, and reference-waveform configuration and echo reception at the radio unit (RU).
+- **Sensor fusion server** – Ingests ISAC and non-cellular sensor observations, aligns them in time and space, correlates detections into tracks, retains uncertainty, and exposes policy-approved results.
+- **DASH** – The proposed Data Access and Security Hub data plane for multi-sensor ingestion, protected processing, and controlled exposure to RIC applications and other authorized consumers.
 - **Sensing waveforms** – NR reference signals such as PRS, SRS, and CSI-RS can support controlled sensing, balancing communication capacity with target-estimation quality.
-- **Unknown target handling** – ambiguous or low-confidence returns remain unknown until supported by evidence; confidence and measurement quality accompany the result.
+- **Unknown target handling** – Ambiguous or low-confidence returns remain unknown until supported by evidence; confidence and measurement quality accompany the result. It is very important and need more information in terms of design perspective when object is NOT identified or unknown in ISAC system.
 
 ## Sensor Fusion Server: Logical Architecture
 
