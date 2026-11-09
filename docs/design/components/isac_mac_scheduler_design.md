@@ -1,5 +1,9 @@
 # ISAC Modified Native gNB MAC Scheduler Design Document
 
+> **Design status:** This document contains research proposals and illustrative, non-production C/C++ sketches, not a standardized ISAC scheduler or validated implementation. For the joint-allocation requirements, feasibility constraints, software contracts, signaling-overhead proposals, and evaluation criteria, start with [Joint Communication and Sensing on Shared Spectrum](../../../README.md#joint-communication-and-sensing-on-shared-spectrum).
+>
+> The sketches below do not implement those requirements: fixed PRB reservations, candidate-independent sensing terms, placeholder CQI/MCS and byte accounting, and immediate remote triggers must not be used as a production optimizer. New DCI/MAC-CE fields, a sensing RNTI, arbitrary DMRS density changes, and F1/Xn sensing extensions are not established by these examples. Use supported NR configurations and negotiated implementation-specific interfaces; validate hardware timing and Tx/Rx isolation.
+
 ## 1. Architectural Overview & Context
 This document outlines a highly technical architectural blueprint and implementation specification for modifying a native **3GPP-compliant gNB Medium Access Control (MAC) layer scheduler** to support an **Integrated Sensing and Communications (ISAC)** module. 
 
@@ -536,4 +540,3 @@ To trigger varying reference signal grids for unified operation seamlessly witho
 2.  **Sensing Indicator Mapping Field (1 Bit):**
     *   `0`: Indicates typical consumer terminal frame composition.
     *   `1`: Informs advanced terminals that co-located spatial parameters contain radar structural beams, instructing the terminal to activate echo reflection suppression filters locally.
-

@@ -4,6 +4,8 @@ This guide gives an end-to-end view of the ISAC architecture and points to the d
 
 The [5G-A ISAC signaling specification](architecture/5G-A_ISAC_Highlevel.md) provides detailed protocol flow and parameter context.
 
+For a software-oriented proposal covering joint resource allocation, feasibility checks, signaling overhead, runtime contracts, and evaluation, see [Joint Communication and Sensing on Shared Spectrum](../README.md#joint-communication-and-sensing-on-shared-spectrum). The repository's sensing-specific interface extensions are illustrative unless explicitly verified against the deployed standards release and implementation.
+
 ## Concepts and measurements
 
 The [ISAC basics illustration](assets/reference/6G_Research_ISAC_Basics_01.jpeg) introduces the shared communication-and-sensing purpose and processing flow. The [measurement types illustration](assets/reference/6G_Research_ISAC_MeasType_01.jpeg) is a quick reference for metrics used to describe sensing results.
