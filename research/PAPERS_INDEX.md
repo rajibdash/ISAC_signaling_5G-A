@@ -2,6 +2,10 @@
 
 PDFs are stored in [papers/](papers/), grouped here by technology area.
 
+## Research Agenda
+
+- [6G ISAC research ideas](6G_ISAC_RESEARCH_IDEAS.md) – candidate questions on waveform design, scheduling, sensing topologies, signal processing, fusion, emerging radio technologies, privacy, and end-to-end evaluation.
+
 ## Standards & Industry Perspective
 
 | Paper | Relevance |
