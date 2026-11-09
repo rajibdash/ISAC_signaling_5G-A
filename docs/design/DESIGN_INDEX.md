@@ -11,7 +11,7 @@ The diagram provides a high-level view of processing sensing signals and echoes 
 | Component | Document | Layer / Scope | Summary |
 |---|---|---|---|
 | ISAC MAC Scheduler | [isac_mac_scheduler_design.md](components/isac_mac_scheduler_design.md) | L2, gNB-DU | Modifies a native 3GPP gNB MAC scheduler for ISAC: monostatic/bistatic modes, dual-waveform (unified MIMO-OFDM vs. split radar/cellular), scheduling loop, C/C++ data structures, Lyapunov weight engine, sub-ms timing, DCI reference design. |
-| DASH | [dash_design_specification.md](components/dash_design_specification.md) | 6G RAN data plane | Data Access and Security Hub: multi-sensor aggregation, zero-trust access, Protobuf/gRPC APIs, TEE/HE/differential privacy, attestation. |
+| DASH | [dash_design_specification.md](components/dash_design_specification.md) | 6G RAN data plane | Data Access and Security Hub: multi-sensor aggregation, zero-trust access, Protobuf/gRPC APIs, TEE/HE/differential privacy, attestation, and proposed [DASH Core access and agent governance](components/dash_design_specification.md#42-dash-core-role-accessibility-and-agent-governance). |
 
 ## Related
 
