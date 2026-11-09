@@ -64,7 +64,24 @@ flowchart TD
   KMS -. trust & key lifecycle .-> I3
 ```
 
-### 3.2 Deployment Trade-Off Matrix
+### 3.2 MultiX Perceptive 6G-RAN Ecosystem Diagram
+
+![MultiX Perceptive 6G-RAN ecosystem showing multi-band and multi-static sensing, 3GPP and non-3GPP perception systems, DASH data services, and secure access to AI-driven consumers](../../assets/diagrams/rajib.jpeg)
+
+*Figure: MultiX Perceptive 6G-RAN (MP6R) ecosystem and the role of DASH in sensor-data integration and secure exposure.*
+
+The figure places DASH in a broader **multi-band, multi-static, multi-sensor, and multi-technology** perception environment. It complements the deployment view in Section 3.1: that view describes where DASH can run, while this diagram shows the kinds of sensing systems and consumers that exchange data through the DASH capability.
+
+- **Multi-band sensing and connectivity:** Camera, LiDAR, radar, and network-as-a-sensor inputs appear alongside MultiX Sensing Functions (SFs). The arrows labeled *band 1* and *band 2* illustrate that sensing and perceptive connectivity can span multiple bands. The user/device side also calls out ProSe, IAB, and D2D as perceptive connectivity options.
+- **Multi-static and heterogeneous sources:** The lower-left portion includes an ISAC-enabled reconfigurable intelligent surface (RIS), wearable/device imagery, and distributed sensing endpoints. These illustrate that observations can come from spatially separated sources rather than one collocated sensor. MultiX SFs provide the sensing functions associated with these endpoints.
+- **3GPP and non-3GPP perception systems:** The dashed MP6R system boundary contains both a 3GPP MultiX Perception System (MPS) and a non-3GPP MPS. The multiple DASH blocks indicate data-service placement across this heterogeneous environment; they should be read as a system-level view, not as a requirement for a fixed number of DASH instances.
+- **DASH integration and exposure:** DASH is positioned between MultiX sensing/perception functions and the consumers of their data. In this specification, that role maps to sensor registration, ingestion and normalization, policy enforcement, privacy-preserving processing, and controlled exposure. The figure's *DASH Exposure* label emphasizes that consumers receive data through a managed access boundary rather than directly from every sensor.
+- **Consumers and information flow:** The diagram connects DASH to an MP6R Controller (MP6RC), AI-based system management, and a third party. Its right-hand flow summarizes the intended progression from **multi-sensor data fusion and integration**, through an **AI/ML engine**, to **secure data access**. The design specification makes that access policy-gated and associates exposed data with the trust and confidence metadata described in Sections 4-7.
+- **Technology boundary:** The *Multi-technology* label and the separate MPS domains highlight the need to normalize and govern data across different technology and deployment domains. DASH's interfaces and policy model are intended to provide a consistent access contract without requiring every source to share the same underlying radio or sensing implementation.
+
+The illustration is a conceptual ecosystem diagram; it does not prescribe DASH's internal APIs, a particular transport, or the physical placement of each DASH block. Those implementation choices remain governed by latency, compute, trust, and data-sensitivity requirements, as outlined below and in the functional architecture.
+
+### 3.3 Deployment Trade-Off Matrix
 
 | Dimension | DU Deployment | Baseband HW / SoC / FPGA | Higher Layers (CU-UP / Edge Cloud) |
 |---|---|---|---|
@@ -281,3 +298,4 @@ To remain consistent with modern 6G collaborative initiatives (including multi-d
 - Corrected protocol and mathematical notation issues.
 - Replaced ambiguous architecture depiction with coherent deployment/flow diagrams.
 - Expanded 6G program alignment content to strengthen external relevance and positioning.
+- Added the MultiX Perceptive 6G-RAN ecosystem diagram and detailed its DASH, sensing, and secure-exposure context.
