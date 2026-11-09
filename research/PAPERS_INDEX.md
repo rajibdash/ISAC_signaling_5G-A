@@ -37,3 +37,4 @@ PDFs are stored in [papers/](papers/), grouped here by technology area.
 - Resource allocation → [MAC scheduler](../docs/design/components/isac_mac_scheduler_design.md)
 - Fusion, use cases → [DASH](../docs/design/components/dash_design_specification.md)
 - Standards, FR3 → [Architecture guide](../docs/ARCHITECTURE.md)
+- Ericsson portal, [ISAC](https://www.ericsson.com/en/isac)
