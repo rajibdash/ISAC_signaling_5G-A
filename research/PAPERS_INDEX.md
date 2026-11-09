@@ -38,4 +38,5 @@ PDFs are stored in [papers/](papers/), grouped here by technology area.
 - Fusion, use cases → [DASH](../docs/design/components/dash_design_specification.md)
 - Standards, FR3 → [Architecture guide](../docs/ARCHITECTURE.md)
 - Ericsson portal, [ISAC](https://www.ericsson.com/en/isac)
-- Sharetechnote, [ISAC](https://www.sharetechnote.com/html/5G/5G_ISAC.html)
+- Sharetechnote, [ISAC-5G](https://www.sharetechnote.com/html/5G/5G_ISAC.html)
+- Sharetechnote, [ISAC-6G](https://www.sharetechnote.com/html/6G/6G_Research_ISAC.html)
