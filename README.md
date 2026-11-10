@@ -22,7 +22,7 @@ The design below is an implementation proposal, not a standardized ISAC protocol
 
 Two different costs must be optimized:
 
-| Cost | What is shared or transmitted | Software implication |
+| Cost | What is shared or transmitted | RAN Software implication |
 |---|---|---|
 | Over-the-air waveform resources | Time, frequency, beam/spatial layers, and transmit power used by data, reference signals, or dedicated sensing bursts | Track PRBs **and symbols**, reference-signal REs, beam/RF-chain occupancy, power, guards, and receive windows; a PRB-only mask is insufficient |
 | Control and reporting | Session setup, configuration, activation, distributed-node coordination, and measurement feedback | Track message rate, bytes, retries, deadlines, and configuration versions; distinguish air-interface overhead from fronthaul/backhaul load |
